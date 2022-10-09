@@ -1,4 +1,5 @@
 # 2022fall-os
-2022-fall os projects  
+2022-fall os labs & homeworks  
 correctness unguaranteed  
-for personal use only
+only for documentary use   
+(textbook: Operating System: Three Easy Pieces)
