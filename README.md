@@ -1,2 +1,4 @@
 # 2022fall-os
-fudan 2022-fall os projects
+2022-fall os projects  
+correctness unguaranteed  
+for personal use only
