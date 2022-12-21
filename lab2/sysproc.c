@@ -5,6 +5,7 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
+#include "sysinfo.h"
 
 uint64
 sys_exit(void)
@@ -27,6 +28,16 @@ sys_fork(void)
   return fork();
 }
 
+uint64
+sys_trace(void)
+{
+  int n;
+  argint(0, &n);
+  if(n>0) 
+    myproc()->tracenum = n;
+  return 0;
+}
+  
 uint64
 sys_wait(void)
 {
@@ -93,13 +104,23 @@ sys_uptime(void)
 }
 
 uint64
-sys_trace(void)
+sys_sysinfo(void)
 {
-  int mask;
-  if(argint(0, &mask) < 0)
+  struct sysinfo info;
+  uint64 addr;
+  // 获取用户态传入的sysinfo结构体
+  argaddr(0, &addr) ;
+  
+  struct proc* p = myproc();
+  info.freemem = get_free_mem();
+  info.nproc = get_proc_num();
+
+  // 将内核态中的info复制到用户态    
+  //copyout 参数：进程页表，用户态目标地址，数据源地址，数据大小
+  //返回值：数据大小
+  if(copyout(p->pagetable, addr, (char *)&info, sizeof(info)) < 0)
     return -1;
   
-  myproc()->mask = mask;
+  printf("my student number is 20307140008\n");
   return 0;
 }
-

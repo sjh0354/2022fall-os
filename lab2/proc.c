@@ -312,8 +312,7 @@ fork(void)
 
   pid = np->pid;
   
-  // 子进程复制父进程的 mask 
-  np->mask = p->mask;
+  np->tracenum = p->tracenum;
 
   release(&np->lock);
 
@@ -684,3 +683,16 @@ procdump(void)
     printf("\n");
   }
 }
+
+uint64
+get_proc_num()
+{
+  int i;
+  uint64 n = 0;
+  for (i = 0; i < NPROC; i++)
+  {
+    if (proc[i].state != UNUSED) n++;
+  }
+  return n;
+}
+
