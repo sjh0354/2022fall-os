@@ -93,3 +93,27 @@ sys_uptime(void)
   return xticks;
 }
 
+uint64
+sys_sigreturn(void){
+    return 0;
+}
+
+uint64
+sys_sigalarm(void){
+  int interval;
+  uint64 handler;
+  struct proc *p;
+  argint(0, &interval) ;
+  argaddr(1, &handler) ;
+  if (interval < 0) {
+        return -1;
+    }
+    // lab4-3
+    p = myproc();
+    p->interval = interval;
+    p->handler = handler;
+    p->passedticks = 0;    // 重置过去时钟数
+
+    return 0;
+}
+
