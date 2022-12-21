@@ -95,6 +95,14 @@ sys_uptime(void)
 
 uint64
 sys_sigreturn(void){
+    struct proc* p = myproc();
+    // trapframecopy must have the copy of trapframe
+    if(p->trapcopy != p->trapframe + 512) {
+        return -1;
+    }
+    memmove(p->trapframe, p->trapcopy, sizeof(struct trapframe));   // restore the trapframe
+    p->passedticks = 0;     // prevent re-entrant
+    p->trapcopy = 0;    // 置零
     return 0;
 }
 

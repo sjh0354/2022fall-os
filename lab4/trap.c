@@ -79,7 +79,8 @@ usertrap(void)
   if(which_dev == 2){   // timer interrupt
     // increase the passed ticks
     if(p->interval != 0 && ++p->passedticks == p->interval){
-      p->passedticks = 0;
+      p->trapcopy = p->trapframe + 512;  
+      memmove(p->trapcopy,p->trapframe,sizeof(struct trapframe));    // copy trapframe
       p->trapframe->epc = p->handler;   // execute handler() when return to user space
     }
   }
